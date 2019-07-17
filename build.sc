@@ -8,7 +8,6 @@ import mill._
 import mill.scalalib._
 import publish._
 import mill.modules.Jvm.createAssembly
-import mill.modules.Assembly
 
 trait MillPublishModule extends PublishModule{
 
@@ -614,15 +613,13 @@ def releaseBase(version: String,
   os.move(
     createAssembly(
       devRunClasspath,
-      None,
       prependShellScript = launcherScript(
         shellArgs,
         cmdArgs,
         Agg("$0"),
-        Agg("%~dpnx0")
-      ),
-      None,
-      Assembly.defaultRules
+        Agg("%~dpnx0"),
+        bootstrapString
+      )
     ).path,
     ctx.dest / filename
   )
